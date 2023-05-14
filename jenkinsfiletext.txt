@@ -1,0 +1,69 @@
+pipeline {
+    agent any
+
+    environment {
+        DIRECTORY_PATH = "\\Users\\rjasw\\Downloads\\"
+        TESTING_ENVIRONMENT = "Testing"
+        PRODUCTION_ENVIRONMENT = "Yasaswini"
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                echo "Fetch the source code from the directory path specified by the environment variable."
+                echo "Compile the code and generate any necessary artifacts."
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo "Run unit tests."
+                echo "Run integration tests."
+            }
+            post{
+                success{
+                    mail to: "yasaswinimalreddy@gmail.com",
+                    subject: "Test Stage Status Email",
+                    body: "Tests are successful!!"
+                }
+            }
+        }
+
+        stage('Code Analysis') {
+            steps {
+                echo "Check the quality of the code."
+            }
+        }
+
+        stage('Security Scan') {
+            steps {
+                echo "Performing a security scan on the code"
+            }
+            post{
+                success{
+                    mail to: "yasaswinimalreddy@gmail.com",
+                    subject: "Security Scan Stage Status Email",
+                    body: "Security Scan is successful!!"
+                }
+            }
+        }
+
+        stage('Deploy to staging') {
+            steps {
+                echo "Deploying the application to a staging server"
+            }
+        }
+
+        stage('Test on staging') {
+            steps {
+                echo "Run integration tests"
+            }
+        }
+        stage('Deploy to Production') {
+            
+            steps {
+                echo "Deploy the code to the production environment ${PRODUCTION_ENVIRONMENT}."
+            }
+        }
+    }
+}
